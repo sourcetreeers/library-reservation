@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图书馆预约系统 - 自动化测试报告</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; border-radius: 12px; margin-bottom: 30px; }
+    header h1 { font-size: 28px; margin-bottom: 10px; }
+    header .meta { opacity: 0.85; font-size: 14px; }
+
+    .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
+    .summary-card { background: white; border-radius: 10px; padding: 24px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .summary-card .number { font-size: 36px; font-weight: 700; }
+    .summary-card .label { font-size: 14px; color: #666; margin-top: 4px; }
+    .summary-card.total .number { color: #667eea; }
+    .summary-card.passed .number { color: #52c41a; }
+    .summary-card.failed .number { color: #ff4d4f; }
+    .summary-card.rate .number { font-size: 24px; color: #faad14; }
+
+    .section-title { font-size: 20px; font-weight: 600; margin: 30px 0 16px; padding-bottom: 8px; border-bottom: 2px solid #e8e8e8; }
+
+    table { width: 100%; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-collapse: collapse; }
+    th { background: #fafafa; padding: 14px 16px; text-align: left; font-weight: 600; font-size: 14px; border-bottom: 2px solid #e8e8e8; }
+    td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    tr.pass { border-left: 3px solid #52c41a; }
+    tr.fail { border-left: 3px solid #ff4d4f; background: #fff2f0; }
+
+    .screenshots { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 16px; }
+    .screenshot-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.2s; }
+    .screenshot-card:hover { transform: translateY(-2px); }
+    .screenshot-card img { width: 100%; display: block; cursor: pointer; }
+    .screenshot-card img.zoomed { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: auto; max-width: 90vw; max-height: 90vh; z-index: 1000; box-shadow: 0 8px 40px rgba(0,0,0,0.3); border-radius: 4px; }
+    .screenshot-card .caption { padding: 10px 14px; font-size: 13px; color: #666; background: #fafafa; }
+
+    footer { text-align: center; padding: 40px 0 20px; color: #999; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>图书馆预约系统 - 自动化测试报告</h1>
+      <p class="meta">生成时间: 2026/6/28 23:56:56 | 测试地址: http://localhost:3000</p>
+    </header>
+
+    <div class="summary">
+      <div class="summary-card total">
+        <div class="number">18</div>
+        <div class="label">测试总数</div>
+      </div>
+      <div class="summary-card passed">
+        <div class="number">18</div>
+        <div class="label">通过</div>
+      </div>
+      <div class="summary-card failed">
+        <div class="number">0</div>
+        <div class="label">失败</div>
+      </div>
+      <div class="summary-card rate">
+        <div class="number">100%</div>
+        <div class="label">通过率</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">测试用例结果</h2>
+    <table>
+      <thead>
+        <tr><th>测试套件</th><th>测试用例</th><th>结果</th><th>详情</th></tr>
+      </thead>
+      <tbody>
+    <tr class="pass">
+      <td>登录流程</td>
+      <td>登录页面加载</td>
+      <td><strong>PASS</strong></td>
+      <td>表单元素存在</td>
+    </tr>
+    <tr class="pass">
+      <td>登录流程</td>
+      <td>错误密码登录拦截</td>
+      <td><strong>PASS</strong></td>
+      <td>应留在登录页或显示错误</td>
+    </tr>
+    <tr class="pass">
+      <td>登录流程</td>
+      <td>正确登录跳转首页</td>
+      <td><strong>PASS</strong></td>
+      <td>跳转成功</td>
+    </tr>
+    <tr class="pass">
+      <td>登录流程</td>
+      <td>首页导航栏显示</td>
+      <td><strong>PASS</strong></td>
+      <td>正常</td>
+    </tr>
+    <tr class="pass">
+      <td>注册流程</td>
+      <td>注册页面表单加载</td>
+      <td><strong>PASS</strong></td>
+      <td>必填字段存在</td>
+    </tr>
+    <tr class="pass">
+      <td>注册流程</td>
+      <td>注册表单填写</td>
+      <td><strong>PASS</strong></td>
+      <td>用户名: testuser_mqxz1aef</td>
+    </tr>
+    <tr class="pass">
+      <td>注册流程</td>
+      <td>注册提交并跳转</td>
+      <td><strong>PASS</strong></td>
+      <td>当前URL: http://localhost:3000/#/mobile/login</td>
+    </tr>
+    <tr class="pass">
+      <td>预约流程</td>
+      <td>首页三步向导显示</td>
+      <td><strong>PASS</strong></td>
+      <td>正常</td>
+    </tr>
+    <tr class="pass">
+      <td>预约流程</td>
+      <td>进入图书馆选择页</td>
+      <td><strong>PASS</strong></td>
+      <td>van-cell: 22, search: true</td>
+    </tr>
+    <tr class="pass">
+      <td>预约流程</td>
+      <td>选择图书馆进入座位页</td>
+      <td><strong>PASS</strong></td>
+      <td>grid: true, seats: 126</td>
+    </tr>
+    <tr class="pass">
+      <td>预约流程</td>
+      <td>座位布局加载</td>
+      <td><strong>PASS</strong></td>
+      <td>可用座位: 126</td>
+    </tr>
+    <tr class="pass">
+      <td>预约流程</td>
+      <td>预约确认</td>
+      <td><strong>PASS</strong></td>
+      <td>预约流程完成</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>创建测试预约</td>
+      <td><strong>PASS</strong></td>
+      <td>20260628-0025</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>我的预约页面加载</td>
+      <td><strong>PASS</strong></td>
+      <td>Tabs: true, Items: true</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>Tab 切换</td>
+      <td><strong>PASS</strong></td>
+      <td>找到 5 个 Tab</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>二维码查看</td>
+      <td><strong>PASS</strong></td>
+      <td>已打开</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>取消预约操作</td>
+      <td><strong>PASS</strong></td>
+      <td>已取消</td>
+    </tr>
+    <tr class="pass">
+      <td>我的预约</td>
+      <td>底部导航栏显示</td>
+      <td><strong>PASS</strong></td>
+      <td>正常</td>
+    </tr></tbody>
+    </table>
+
+    <h2 class="section-title">测试截图 (18 张)</h2>
+    <div class="screenshots">
+    <div class="screenshot-card">
+      <img src="01-login-page.png" alt="01-login-page.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">01-login-page.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="02-login-error.png" alt="02-login-error.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">02-login-error.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="03-login-form-filled.png" alt="03-login-form-filled.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">03-login-form-filled.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="04-login-success.png" alt="04-login-success.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">04-login-success.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="05-register-page.png" alt="05-register-page.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">05-register-page.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="06-register-form-filled.png" alt="06-register-form-filled.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">06-register-form-filled.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="07-register-result.png" alt="07-register-result.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">07-register-result.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="08-step0-initial.png" alt="08-step0-initial.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">08-step0-initial.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="09-step0-date-selected.png" alt="09-step0-date-selected.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">09-step0-date-selected.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="10-step1-library-list.png" alt="10-step1-library-list.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">10-step1-library-list.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="11-step2-seat-grid.png" alt="11-step2-seat-grid.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">11-step2-seat-grid.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="12-step2-seat-selected.png" alt="12-step2-seat-selected.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">12-step2-seat-selected.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="13-reservation-confirmed.png" alt="13-reservation-confirmed.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">13-reservation-confirmed.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="14-my-reservations.png" alt="14-my-reservations.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">14-my-reservations.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="15-my-reservations-tab-reserved.png" alt="15-my-reservations-tab-reserved.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">15-my-reservations-tab-reserved.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="16-qrcode-page.png" alt="16-qrcode-page.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">16-qrcode-page.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="17-cancel-dialog.png" alt="17-cancel-dialog.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">17-cancel-dialog.png</div>
+    </div>
+    <div class="screenshot-card">
+      <img src="18-cancel-confirmed.png" alt="18-cancel-confirmed.png" loading="lazy" onclick="this.classList.toggle('zoomed')" />
+      <div class="caption">18-cancel-confirmed.png</div>
+    </div></div>
+
+    <footer><p>图书馆预约系统 E2E 自动化测试 &copy; 2026</p></footer>
+  </div>
+</body>
+</html>

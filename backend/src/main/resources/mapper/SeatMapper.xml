@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.SeatMapper">
+
+    <!-- 分页查询座位 -->
+    <select id="selectPageWithCondition" resultType="com.library.entity.Seat">
+        SELECT 
+            s.id,
+            s.library_id,
+            s.seat_number,
+            s.seat_type,
+            s.status,
+            s.row_num,
+            s.col_num,
+            s.create_time,
+            s.update_time
+        FROM seat s
+        <where>
+            <if test="libraryId != null">
+                AND s.library_id = #{libraryId}
+            </if>
+            <if test="seatNumber != null and seatNumber != ''">
+                AND s.seat_number LIKE CONCAT('%', #{seatNumber}, '%')
+            </if>
+            <if test="seatType != null and seatType != ''">
+                AND s.seat_type = #{seatType}
+            </if>
+            <if test="status != null and status != ''">
+                AND s.status = #{status}
+            </if>
+        </where>
+        ORDER BY s.id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 查询总数 -->
+    <select id="countWithCondition" resultType="long">
+        SELECT COUNT(1) 
+        FROM seat s
+        <where>
+            <if test="libraryId != null">
+                AND s.library_id = #{libraryId}
+            </if>
+            <if test="seatNumber != null and seatNumber != ''">
+                AND s.seat_number LIKE CONCAT('%', #{seatNumber}, '%')
+            </if>
+            <if test="seatType != null and seatType != ''">
+                AND s.seat_type = #{seatType}
+            </if>
+            <if test="status != null and status != ''">
+                AND s.status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

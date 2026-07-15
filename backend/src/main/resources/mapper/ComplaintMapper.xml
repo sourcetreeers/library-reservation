@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.ComplaintMapper">
+
+    <resultMap id="complaintResultMap" type="com.library.entity.Complaint">
+        <id column="id" property="id" />
+        <result column="reporter_id" property="reporterId" />
+        <result column="occupant_id" property="occupantId" />
+        <result column="seat_id" property="seatId" />
+        <result column="library_id" property="libraryId" />
+        <result column="reporter_reservation_id" property="reporterReservationId" />
+        <result column="occupant_reservation_id" property="occupantReservationId" />
+        <result column="description" property="description" />
+        <result column="status" property="status" />
+        <result column="handler_id" property="handlerId" />
+        <result column="handler_reply" property="handlerReply" />
+        <result column="create_time" property="createTime" />
+        <result column="handle_time" property="handleTime" />
+        <result column="reporter_name" property="reporterName" />
+        <result column="occupant_name" property="occupantName" />
+        <result column="library_name" property="libraryName" />
+        <result column="seat_number" property="seatNumber" />
+        <result column="image_url" property="imageUrl" />
+        <result column="reporter_start_time" property="reporterReservationStartTime" />
+        <result column="reporter_end_time" property="reporterReservationEndTime" />
+        <result column="occupant_start_time" property="occupantReservationStartTime" />
+        <result column="occupant_end_time" property="occupantReservationEndTime" />
+    </resultMap>
+
+    <select id="selectComplaintPage" resultMap="complaintResultMap">
+        SELECT
+            c.*,
+            ru.real_name AS reporter_name,
+            ou.real_name AS occupant_name,
+            l.name AS library_name,
+            s.seat_number AS seat_number,
+            rr.start_time AS reporter_start_time,
+            rr.end_time AS reporter_end_time,
+            orr.start_time AS occupant_start_time,
+            orr.end_time AS occupant_end_time
+        FROM complaint c
+        LEFT JOIN user ru ON c.reporter_id = ru.id
+        LEFT JOIN user ou ON c.occupant_id = ou.id
+        LEFT JOIN library l ON c.library_id = l.id
+        LEFT JOIN seat s ON c.seat_id = s.id
+        LEFT JOIN reservation rr ON c.reporter_reservation_id = rr.id
+        LEFT JOIN reservation orr ON c.occupant_reservation_id = orr.id
+        <where>
+            <if test="status != null and status != ''">
+                AND c.status = #{status}
+            </if>
+        </where>
+        ORDER BY c.create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countComplaints" resultType="long">
+        SELECT COUNT(1) FROM complaint
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

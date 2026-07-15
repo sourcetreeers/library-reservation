@@ -1,0 +1,31 @@
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Java / Maven
+backend/target/
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Unpacked Word document (generated/temp)
+unpacked_paper/
+
+# AI assistant local files
+.claude/
+.codebuddy/
+
+# Temp files
+~$*.docx
+
+# Logs
+*.log

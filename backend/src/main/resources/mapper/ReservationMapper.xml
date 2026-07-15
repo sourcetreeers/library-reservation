@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.ReservationMapper">
+
+    <!-- 查询预约记录详情列表 -->
+    <select id="selectReservationPage" resultType="com.library.vo.ReservationVO">
+        SELECT 
+            r.id,
+            r.order_no as orderNo,
+            r.user_id as userId,
+            u.username as userName,
+            u.real_name as realName,
+            r.library_id as libraryId,
+            l.name as libraryName,
+            r.seat_id as seatId,
+            s.seat_number as seatNumber,
+            r.start_time as startTime,
+            r.end_time as endTime,
+            r.status,
+            r.qr_code as qrCode,
+            r.check_in_time as checkInTime,
+            r.create_time as createTime
+        FROM reservation r
+        LEFT JOIN user u ON r.user_id = u.id
+        LEFT JOIN library l ON r.library_id = l.id
+        LEFT JOIN seat s ON r.seat_id = s.id
+        <where>
+            <if test="userId != null">
+                AND r.user_id = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                AND r.status = #{status}
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <!-- 检查座位时间冲突 -->
+    <select id="checkSeatTimeConflict" resultType="int">
+        SELECT COUNT(1)
+        FROM reservation
+        WHERE seat_id = #{seatId}
+        AND status IN ('已预约', '已使用')
+        AND (
+            (start_time &lt;= #{startTime} AND end_time &gt; #{startTime})
+            OR (start_time &lt; #{endTime} AND end_time &gt;= #{endTime})
+            OR (start_time &gt;= #{startTime} AND end_time &lt;= #{endTime})
+        )
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <!-- 检查用户时间冲突 -->
+    <select id="checkUserTimeConflict" resultType="int">
+        SELECT COUNT(1)
+        FROM reservation
+        WHERE user_id = #{userId}
+        AND status IN ('已预约', '已使用')
+        AND (
+            (start_time &lt;= #{startTime} AND end_time &gt; #{startTime})
+            OR (start_time &lt; #{endTime} AND end_time &gt;= #{endTime})
+            OR (start_time &gt;= #{startTime} AND end_time &lt;= #{endTime})
+        )
+        <if test="excludeId != null">
+            AND id != #{excludeId}
+        </if>
+    </select>
+
+    <!-- 查询过期未签到的预约记录 -->
+    <select id="selectExpiredReservations" resultType="com.library.entity.Reservation">
+        SELECT *
+        FROM reservation
+        WHERE status = '已预约'
+        AND end_time &lt; NOW()
+    </select>
+
+    <!-- 查询即将过期的预约记录（当前时间已超过预约结束时间前20分钟） -->
+    <select id="selectSoonExpiredReservations" resultType="com.library.entity.Reservation">
+        SELECT *
+        FROM reservation
+        WHERE status = '已预约'
+        AND DATE_SUB(end_time, INTERVAL 20 MINUTE) &lt;= NOW()
+        AND end_time > NOW()
+    </select>
+
+    <!-- 根据流水号查询预约记录详情 -->
+    <select id="selectReservationDetailByOrderNo" resultType="com.library.vo.ReservationVO">
+        SELECT 
+            r.id,
+            r.order_no as orderNo,
+            r.user_id as userId,
+            u.username as userName,
+            u.real_name as realName,
+            r.library_id as libraryId,
+            l.name as libraryName,
+            r.seat_id as seatId,
+            s.seat_number as seatNumber,
+            r.start_time as startTime,
+            r.end_time as endTime,
+            r.status,
+            r.qr_code as qrCode,
+            r.check_in_time as checkInTime,
+            r.create_time as createTime
+        FROM reservation r
+        LEFT JOIN user u ON r.user_id = u.id
+        LEFT JOIN library l ON r.library_id = l.id
+        LEFT JOIN seat s ON r.seat_id = s.id
+        WHERE r.order_no = #{orderNo}
+    </select>
+
+    <!-- 分页查询预约记录详情列表（手写SQL） -->
+    <select id="selectReservationPageWithCondition" resultType="com.library.vo.ReservationVO">
+        SELECT 
+            r.id,
+            r.order_no as orderNo,
+            r.user_id as userId,
+            u.username as userName,
+            u.real_name as realName,
+            r.library_id as libraryId,
+            l.name as libraryName,
+            r.seat_id as seatId,
+            s.seat_number as seatNumber,
+            r.start_time as startTime,
+            r.end_time as endTime,
+            r.status,
+            r.qr_code as qrCode,
+            r.check_in_time as checkInTime,
+            r.create_time as createTime
+        FROM reservation r
+        LEFT JOIN user u ON r.user_id = u.id
+        LEFT JOIN library l ON r.library_id = l.id
+        LEFT JOIN seat s ON r.seat_id = s.id
+        <where>
+            <if test="userId != null">
+                AND r.user_id = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                AND r.status = #{status}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND (u.username LIKE CONCAT('%', #{userName}, '%') OR u.real_name LIKE CONCAT('%', #{userName}, '%'))
+            </if>
+            <if test="libraryId != null">
+                AND r.library_id = #{libraryId}
+            </if>
+            <if test="seatNumber != null and seatNumber != ''">
+                AND s.seat_number LIKE CONCAT('%', #{seatNumber}, '%')
+            </if>
+        </where>
+        ORDER BY r.id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 查询预约记录总数 -->
+    <select id="countReservationWithCondition" resultType="long">
+        SELECT COUNT(1)
+        FROM reservation r
+        LEFT JOIN user u ON r.user_id = u.id
+        LEFT JOIN library l ON r.library_id = l.id
+        LEFT JOIN seat s ON r.seat_id = s.id
+        <where>
+            <if test="userId != null">
+                AND r.user_id = #{userId}
+            </if>
+            <if test="status != null and status != ''">
+                AND r.status = #{status}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND (u.username LIKE CONCAT('%', #{userName}, '%') OR u.real_name LIKE CONCAT('%', #{userName}, '%'))
+            </if>
+            <if test="libraryId != null">
+                AND r.library_id = #{libraryId}
+            </if>
+            <if test="seatNumber != null and seatNumber != ''">
+                AND s.seat_number LIKE CONCAT('%', #{seatNumber}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
